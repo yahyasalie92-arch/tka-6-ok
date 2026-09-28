@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistem Ujian Terpadu | Bahasa Inggris Kelas XII Saintek & Soshum</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        html, body {
+            background-color: var(--bg);
+            height: 100vh; 
+            height: 100dvh; 
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: var(--text-dark);
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none; 
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-wrapper {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .school-logo {
+            max-width: 120px;
+            height: auto;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .school-logo:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .alert-box {
+            background-color: #fff1f2;
+            border-left: 4px solid var(--danger);
+            padding: 15px;
+            text-align: left;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .alert-box strong {
+            color: var(--danger);
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .alert-box p {
+            font-size: 13px;
+            margin-bottom: 0;
+            color: #991b1b;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], select.select-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+            transition: border-color 0.3s;
+            -webkit-user-select: auto;
+            user-select: auto; 
+            background-color: white;
+            color: var(--text-dark);
+        }
+
+        #unlock-code {
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        input[type="text"]:focus, select.select-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        select.select-input {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        #exam-screen {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: white;
+            position: relative;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 1;
+        }
+
+        .timer-container {
+            display: none;
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            color: #ffffff;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            align-items: center;
+            gap: 6px;
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 30px 20px; }
+            h1 { font-size: 20px; }
+            .school-logo { max-width: 90px; }
+            .timer-container { font-size: 12px; padding: 6px 12px; top: 10px; right: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="exam-timer" class="timer-container">
+        <span>⏱️</span> <span id="timer-time">00:00:00</span>
+    </div>
+
+    <div id="start-screen" class="main-wrapper">
+        <div class="card">
+            <div class="logo-wrapper">
+                <img src="https://cdn.corenexis.com/f/rD3vm6CMiKn.png" alt="Logo Sekolah" class="school-logo">
+            </div>
+            
+            <h1>Identitas Ujian</h1>
+            <p>Silakan lengkapi data diri Anda sebelum memulai ujian Bahasa Inggris Kelas XII Saintek & Soshum.</p>
+
+            <div class="input-group">
+                <input type="text" id="nama-siswa" placeholder="Masukkan Nama Lengkap" autocomplete="off" required>
+            </div>
+            <div class="input-group">
+                <select id="kelas-siswa" class="select-input" required>
+                    <option value="" disabled selected>-- Pilih Kelas / Program --</option>
+                    <option value="XII-Saintek">Bahasa Inggris Kelas XII Saintek</option>
+                    <option value="XII-Soshum">Bahasa Inggris Kelas XII Soshum</option>
+                </select>
+            </div>
+            
+            <div class="alert-box">
+                <strong>INSTRUKSI PENTING:</strong>
+                <p>Dilarang me-refresh, membelah layar (split screen), membuka aplikasi mengambang, atau keluar dari mode layar penuh. Ujian akan otomatis TERKUNCI.</p>
+            </div>
+
+            <button class="btn btn-primary" onclick="mulaiUjian()">Masuk</button>
+        </div>
+    </div>
+
+    <div id="exam-screen"></div>
+
+    <div id="lock-screen" class="main-wrapper" style="display: none;">
+        <div class="card" style="border-top: 5px solid var(--danger);">
+            <div style="font-size: 50px; margin-bottom: 10px;">🔒</div>
+            <h1 style="color: var(--danger);">Ujian Terkunci</h1>
+            <p>Sistem mendeteksi aktivitas mencurigakan (Belah Layar, Aplikasi Mengambang, Keluar Layar Penuh, atau Refresh).</p>
+            <p style="font-weight: bold; margin-bottom: 15px;">Silakan panggil pengawas untuk melanjutkan.</p>
+            
+            <div class="input-group">
+                <input type="text" id="unlock-code" placeholder="KODE AKSES GURU" autocomplete="off">
+            </div>
+            
+            <button class="btn btn-danger" onclick="bukaKunci()">Buka Kunci Akses</button>
+        </div>
+    </div>
+
+    <script>
+        const URL_FORM_INGGRIS = "https://forms.gle/LJNmzgZAWbSzoFbD8";
+        const STORAGE_KEY = 'StatusUjian_BahasaInggrisXII_v1';
+        let statusUjian = localStorage.getItem(STORAGE_KEY) || 'awal';
+
+        let detikUjian = parseInt(localStorage.getItem('DetikUjian Berjalan_Inggris')) || 0;
+        let intervalTimer = null;
+
+        const perfEntries = performance.getEntriesByType("navigation");
+        let isReloaded = false;
+        
+        if (perfEntries.length > 0 && perfEntries[0].type === "reload") {
+            isReloaded = true;
+        } else if (window.performance && window.performance.navigation.type === 1) {
+            isReloaded = true;
+        }
+
+        if (statusUjian === 'berjalan' || (statusUjian === 'berjalan' && isReloaded)) {
+            statusUjian = 'terkunci';
+            localStorage.setItem(STORAGE_KEY, 'terkunci');
+        }
+
+        const startScreen = document.getElementById('start-screen');
+        const examScreen = document.getElementById('exam-screen');
+        const lockScreen = document.getElementById('lock-screen');
+        const codeInput = document.getElementById('unlock-code');
+        const timerContainer = document.getElementById('exam-timer');
+        const timerDisplay = document.getElementById('timer-time');
+
+        function jalankanTimer() {
+            if (intervalTimer) clearInterval(intervalTimer);
+            intervalTimer = setInterval(() => {
+                detikUjian++;
+                localStorage.setItem('DetikUjian Berjalan_Inggris', detikUjian);
+                
+                let jam = Math.floor(detikUjian / 3600);
+                let menit = Math.floor((detikUjian % 3600) / 60);
+                let detik = detikUjian % 60;
+
+                timerDisplay.textContent = 
+                    (jam < 10 ? "0" + jam : jam) + ":" + 
+                    (menit < 10 ? "0" + menit : menit) + ":" + 
+                    (detik < 10 ? "0" + detik : detik);
+            }, 1000);
+        }
+
+        function hentikanTimer() {
+            clearInterval(intervalTimer);
+            intervalTimer = null;
+        }
+
+        function aktifkanLayarPenuh() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(() => {});
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen().catch(() => {});
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen().catch(() => {});
+            }
+        }
+
+        function updateUI() {
+            startScreen.style.display = 'none';
+            examScreen.style.display = 'none';
+            lockScreen.style.display = 'none';
+            timerContainer.style.display = 'none';
+
+            if (statusUjian === 'terkunci') {
+                hentikanTimer();
+                lockScreen.style.display = 'flex';
+                examScreen.innerHTML = ''; 
+            } else if (statusUjian === 'berjalan') {
+                examScreen.style.display = 'block';
+                timerContainer.style.display = 'flex';
+                jalankanTimer();
+
+                examScreen.innerHTML = '<iframe id="exam-iframe" src="' + URL_FORM_INGGRIS + '" allowfullscreen></iframe>';
+            } else {
+                hentikanTimer();
+                startScreen.style.display = 'flex';
+                examScreen.innerHTML = ''; 
+                
+                const namaTersimpan = localStorage.getItem('NamaSiswa_Inggris');
+                const kelasTersimpan = localStorage.getItem('KelasSiswa_Inggris');
+                if(namaTersimpan) document.getElementById('nama-siswa').value = namaTersimpan;
+                if(kelasTersimpan) document.getElementById('kelas-siswa').value = kelasTersimpan;
+            }
+        }
+
+        function mulaiUjian() {
+            const nama = document.getElementById('nama-siswa').value.trim();
+            const kelas = document.getElementById('kelas-siswa').value;
+
+            if (nama === "" || kelas === "") {
+                alert("Mohon lengkapi Nama dan Kelas/Program terlebih dahulu sebelum masuk!");
+                return;
+            }
+
+            localStorage.setItem('NamaSiswa_Inggris', nama);
+            localStorage.setItem('KelasSiswa_Inggris', kelas);
+
+            statusUjian = 'berjalan';
+            localStorage.setItem(STORAGE_KEY, 'berjalan');
+            
+            aktifkanLayarPenuh();
+            updateUI();
+        }
+
+        function lockExam() {
+            if (statusUjian === 'berjalan') {
+                statusUjian = 'terkunci';
+                localStorage.setItem(STORAGE_KEY, 'terkunci');
+                updateUI();
+            }
+        }
+
+        function bukaKunci() {
+            const input = codeInput.value.trim().toUpperCase();
+            if (input === "SMADA") {
+                statusUjian = 'awal';
+                localStorage.setItem(STORAGE_KEY, 'awal');
+                codeInput.value = "";
+                detikUjian = 0;
+                localStorage.removeItem('DetikUjian Berjalan_Inggris');
+                updateUI();
+            } else {
+                alert("Kode akses salah. Hanya pengawas yang dapat membuka kunci.");
+            }
+        }
+
+        // ==========================================
+        // FITUR KEAMANAN TAMBAHAN (SPLIT SCREEN & FLOATING)
+        // ==========================================
+
+        // 1. DETEKSI KELUAR DARI FULLSCREEN
+        document.addEventListener("fullscreenchange", checkFullscreen);
+        document.addEventListener("webkitfullscreenchange", checkFullscreen);
+
+        function checkFullscreen() {
+            const isFull = document.fullscreenElement || document.webkitFullscreenElement;
+            if (!isFull && statusUjian === 'berjalan') {
+                lockExam();
+            }
+        }
+
+        // 2. DETEKSI PERUBAHAN UKURAN RASIO LAYAR (SPLIT SCREEN)
+        window.addEventListener("resize", () => {
+            if (statusUjian === 'berjalan') {
+                let rasioTinggi = window.innerHeight / screen.height;
+                if (rasioTinggi < 0.65) {
+                    lockExam();
+                }
+            }
+        });
+
+        // 3. DETEKSI APLIKASI MENGAMBANG (FLOATING WINDOW / FOKUS HILANG)
+        window.addEventListener("blur", () => {
+            if (statusUjian === 'berjalan') {
+                setTimeout(() => {
+                    const iframe = document.getElementById("exam-iframe");
+                    if (document.activeElement !== iframe) {
+                        lockExam();
+                    }
+                }, 300);
+            }
+        });
+
+        // 4. DETEKSI PINDAH TAB / SENSOR VISIBILITAS
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "hidden") {
+                lockExam();
+            }
+        });
+
+        // 5. DETEKSI REFRESH ATAU MENUTUP HALAMAN
+        window.addEventListener("beforeunload", function () {
+            if (statusUjian === 'berjalan') {
+                localStorage.setItem(STORAGE_KEY, 'terkunci');
+            }
+        });
+
+        window.addEventListener("pagehide", function () {
+            if (statusUjian === 'berjalan') {
+                localStorage.setItem(STORAGE_KEY, 'terkunci');
+            }
+        });
+
+        // 6. BLOKIR KLIK KANAN DAN PINTASAN KEYBOARD
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F5' || (e.ctrlKey && (e.key === 'r' || e.key === 'R'))) {
+                e.preventDefault();
+                lockExam();
+            }
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>
